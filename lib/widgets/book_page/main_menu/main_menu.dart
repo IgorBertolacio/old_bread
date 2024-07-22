@@ -2,8 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:old_bread/widgets/book_page/main_menu/main_menu_header.dart';
 import 'package:old_bread/widgets/book_page/main_menu/colors_options/palette_menu.dart';
-import 'package:old_bread/widgets/book_page/main_menu/font_options/fonte_livro.dart';
-import 'package:old_bread/widgets/book_page/main_menu/font_options/fonte_palavra.dart';
+import 'package:old_bread/widgets/book_page/main_menu/font_options/fonte_controller.dart';
 import 'package:old_bread/pages/book_page.dart'; 
 
 // Widget para o menu principal
@@ -26,7 +25,6 @@ class MainMenu extends StatelessWidget {
   final ValueChanged<double> onFontSizeChanged;
   final double fontSizeP;
   final ValueChanged<double> onFontSizeChangedP;
-
   // Callbacks de tema
   final VoidCallback setLightTheme;
   final VoidCallback setLightMediumContrastTheme;
@@ -128,15 +126,12 @@ class MainMenu extends StatelessWidget {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                // Widget para controlar o tamanho da fonte do livro
-                                FonteLivro(
-                                  fontSize: fontSize,
-                                  onFontSizeChanged: onFontSizeChanged,
-                                ),
-                                // Widget para controlar o tamanho da fonte da palavra
-                                FontePalavra(
-                                  fontSizeP: fontSizeP,
-                                  onFontSizeChangedP: onFontSizeChangedP,
+                                // Widget para controlar o tamanho da fonte
+                                FonteControlador(
+                                  fontSizeLivro: fontSize,
+                                  fontSizePalavra: fontSizeP,
+                                  onFontSizeChangedLivro: onFontSizeChanged,
+                                  onFontSizeChangedPalavra: onFontSizeChangedP,
                                 ),
                               ],
                             ),

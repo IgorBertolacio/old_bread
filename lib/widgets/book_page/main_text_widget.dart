@@ -1,3 +1,4 @@
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -26,11 +27,16 @@ class MainTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TextSpan> textSpans = []; // Lista que irá conter os spans de texto
-    List<String> words = defaultText.split(' '); // Divide o texto em palavras
+
+    // String textoManipulado = defaultText.replaceAll('.', ' ');
+  
+   List<String> words = defaultText.split(' ').where((word) => word.isNotEmpty).toList();
 
     // Estilo padrão, usando o tema atual do contexto
     TextStyle defaultStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: fontSize);
     
+  
+
     // Estilo para a palavra selecionada, com fundo amarelo e texto preto
     TextStyle selectedStyle = defaultStyle.copyWith(
       backgroundColor: Colors.yellow, // Fundo amarelo para a palavra selecionada
@@ -40,9 +46,11 @@ class MainTextWidget extends StatelessWidget {
 
     // Cria um TextSpan para cada palavra
     for (int i = 0; i < words.length; i++) {
+      
       bool isSelected = i == selectedIndex; // Verifica se a palavra é a selecionada
       textSpans.add(
         TextSpan(
+          
           text: '${words[i]} ', // Texto da palavra com espaço
           style: isSelected ? selectedStyle : defaultStyle, // Aplica o estilo adequado
           recognizer: TapGestureRecognizer()

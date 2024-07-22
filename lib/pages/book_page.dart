@@ -16,6 +16,16 @@ enum MenuOption { none, palette, text, settings, lock }
 // Enum para os círculos selecionados
 enum SelectedCircle { none, oldBread, dark, white }
 
+// Enum para seleção de tema
+enum ThemeType {
+  light,
+  lightMediumContrast,
+  lightHighContrast,
+  dark,
+  darkMediumContrast,
+  darkHighContrast,
+}
+
 // Classe principal do aplicativo
 class OldBreadBook extends StatefulWidget {
   const OldBreadBook({super.key});
@@ -26,52 +36,45 @@ class OldBreadBook extends StatefulWidget {
 
 // Estado do aplicativo
 class OldBreadBookState extends State<OldBreadBook> {
-  bool isMenuVisible = false; // Controle da visibilidade
-  bool isMenuExpanded = false; //Controle de expansão do menu
-  String _defaultText = 'Carregando...'; // Texto padrão carregado
+  bool   isMenuVisible  = false;            // Controle da visibilidade
+  bool   isMenuExpanded = false;            //Controle de expansão do menu
+  String _defaultText   = 'Carregando...';  // Texto padrão carregado
+  String defaultTextProcess = ''; // Texto padrão processado
   MenuOption selectedOption = MenuOption.none; // Opção selecionada
   SelectedCircle selectedCircle =
       SelectedCircle.none; // Circulo de Cor selecionada
   late ThemeData _currentTheme; // Tema atual
   double brightness = 0.5; // Conf Brilho
   late MaterialTheme _materialTheme;
-  double fontSize = 12.0; // Tamanho da fonte livro
+  double fontSize = 12.0; // Tamanho da fonte livFro
   double fontSizeP = 34.0; // Tamanho da fonte palavra
   String selectedWord = 'OldBreadBook'; // Palavra selecionada
-  int? selectedIndex; // Índice da palavra selecionada
+  int selectedIndex = 0; // Índice da palavra selecionada
   bool isPlaying = false; //Se a palavra esta sendo trocada
-  double currentPPM = 200; // PPM inicial
+  double currentPPM = 60; // PPM inicial
   late int timerInterval; // Intervalo em milissegundos
   Timer? _timer; //temporizador
   bool showPpmText = false; // Controle para exibir o texto PPM
   Timer? _ppmTimer; //Resolver problema com Visualização
-  bool isLocked = false; // Cadeado do texto
-
+  bool isLocked = true; // Cadeado do texto
 
   @override
   void initState() {
     super.initState();
-    // Configuração inicial do tema e carregamento do texto padrão
-    _currentTheme = ThemeData.light();
+    _currentTheme = ThemeData.dark();
     _loadDefaultText();
     _getCurrentBrightness();
     _materialTheme = MaterialTheme(_currentTheme.textTheme);
-
     _updateTimerInterval();
-
-    // Seleção inicial da primeira palavra do texto carregado
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        selectedIndex = _getFirstWordIndex(_defaultText);
-      });
-    });
   }
 
+ 
   // Carrega o texto padrão do arquivo de recursos
   Future<void> _loadDefaultText() async {
     final String text = await rootBundle.loadString('assets/default_text.txt');
     setState(() {
       _defaultText = text;
+      _processText();
     });
   }
 
@@ -83,55 +86,9 @@ class OldBreadBookState extends State<OldBreadBook> {
         brightness = currentBrightness;
       });
     } catch (e) {
-      print("Erro ao obter o brilho atual: $e");
+      debugPrint("Erro ao obter o brilho atual: $e");
     }
   }
-
-/////////////////////////////// TEMA ///////////////////////////////////////////////
-
-  // Define o tema claro
-  void _setLightTheme() {
-    setState(() {
-      _currentTheme = _materialTheme.light();
-    });
-  }
-
-  // Define o tema claro com contraste médio
-  void _setLightMediumContrastTheme() {
-    setState(() {
-      _currentTheme = _materialTheme.lightMediumContrast();
-    });
-  }
-
-  // Define o tema claro com alto contraste
-  void _setLightHighContrastTheme() {
-    setState(() {
-      _currentTheme = _materialTheme.lightHighContrast();
-    });
-  }
-
-  // Define o tema escuro
-  void _setDarkTheme() {
-    setState(() {
-      _currentTheme = _materialTheme.dark();
-    });
-  }
-
-  // Define o tema escuro com contraste médio
-  void _setDarkMediumContrastTheme() {
-    setState(() {
-      _currentTheme = _materialTheme.darkMediumContrast();
-    });
-  }
-
-  // Define o tema escuro com alto contraste
-  void _setDarkHighContrastTheme() {
-    setState(() {
-      _currentTheme = _materialTheme.darkHighContrast();
-    });
-  }
-
-//////////////////////////////////////////////////////////////////////////////
 
   // Manipula a alteração do brilho
   void _handleBrightnessChange(double value) {
@@ -141,42 +98,62 @@ class OldBreadBookState extends State<OldBreadBook> {
     ScreenBrightness().setScreenBrightness(value);
   }
 
-/////////////////////////////////// FONTE ///////////////////////////////////////////
-
-  // Manipula a alteração do tamanho da fonte do texto principal
-  void _handleFontSizeChange(double value) {
+  // Define o tema
+  void setTheme(ThemeType themeType) {
     setState(() {
+      switch (themeType) {
+        case ThemeType.light:
+          _currentTheme = _materialTheme.light();
+          break;
+        case ThemeType.lightMediumContrast:
+          _currentTheme = _materialTheme.lightMediumContrast();
+          break;
+        case ThemeType.lightHighContrast:
+          _currentTheme = _materialTheme.lightHighContrast();
+          break;
+        case ThemeType.dark:
+          _currentTheme = _materialTheme.dark();
+          break;
+        case ThemeType.darkMediumContrast:
+          _currentTheme = _materialTheme.darkMediumContrast();
+          break;
+        case ThemeType.darkHighContrast:
+          _currentTheme = _materialTheme.darkHighContrast();
+          break;
+      }
+    });
+  }
+
+// Manipula a alteração do tamanho da fonte
+void _handleFontSizeChange(String type, double value) {
+  setState(() {
+    if (type == 'livro') {
       fontSize = value;
-    });
-  }
-
-  // Manipula a alteração do tamanho da fonte da palavra selecionada
-  void _handleFontSizeChangeP(double value) {
-    setState(() {
+    } else if (type == 'palavra') {
       fontSizeP = value;
-    });
-  }
-
-/////////////////////////////////// LOGICA PRIMEIRA PALAVRA ///////////////////////////////////////////
-
-  // Define o índice da primeira palavra do texto
-  int? _getFirstWordIndex(String text) {
-    final words = text.split(' ');
-    if (words.isNotEmpty) {
-      return 0; // O índice da primeira palavra é 0
     }
-    return null;
-  }
-
+  });
+}
   // Armazena a palavra selecionada do texto
   void setSelectedIndex(int index) {
     setState(() {
       selectedIndex = index;
-      selectedWord = _defaultText.split(' ')[index];
+      selectedWord = defaultTextProcess.split(' ')[index];
     });
   }
 
-  /////////////////////////////////// LOGICA TROCA PALAVRAS ///////////////////////////////////////////
+  // Tratmento de texto PROVISORIO
+  void _processText() {
+    // Remover todos os quebras de linha
+    defaultTextProcess = _defaultText.replaceAll('\n', '');
+    // Adicionar um espaço depois de cada ponto e vírgula
+    defaultTextProcess = defaultTextProcess.replaceAll('.', '. ');
+    defaultTextProcess = defaultTextProcess.replaceAll(',', ', ');
+    // Substituir espaços duplos por espaços simples
+    while (defaultTextProcess.contains('  ')) {
+      defaultTextProcess = defaultTextProcess.replaceAll('  ', ' ');
+    }
+  }
 
   // Atualiza o intervalo do timer com base no PPM atual
   void _updateTimerInterval() {
@@ -210,29 +187,26 @@ class OldBreadBookState extends State<OldBreadBook> {
 // Avança para a próxima palavra no texto
   void _advanceWord() {
     setState(() {
-      // Verifica se há uma próxima palavra disponível
-      if (selectedIndex != null &&
-          selectedIndex! < _defaultText.split(' ').length - 1) {
+      if (selectedIndex < _defaultText.split(' ').length - 1) {
         // Atualiza o índice e a palavra selecionada para a próxima palavra
-        selectedIndex = selectedIndex! + 1;
-        selectedWord = _defaultText.split(' ')[selectedIndex!];
+        selectedIndex += 1;
+        selectedWord = _defaultText.split(' ')[selectedIndex];
       } else {
         // Pausa o avanço automático se a última palavra for alcançada
         _pausePlaying();
-        _showPpmText();
       }
     });
   }
 
-// Aumenta a velocidade do PPM
-  void _increasePPM() {
+// Aumenta ou diminui o PPM atual
+  void _changePPM(bool increase) {
     setState(() {
       _showPpmText();
-      // Incrementa o PPM atual em 10
-      currentPPM += 10;
-      // Atualiza o intervalo do timer com o novo PPM
+      currentPPM = increase
+          ? currentPPM + 10
+          : (currentPPM > 10 ? currentPPM - 10 : currentPPM);
       _updateTimerInterval();
-      // Reinicia o timer para aplicar a nova velocidade imediatamente
+
       if (isPlaying) {
         _pausePlaying();
         _startPlaying();
@@ -240,50 +214,23 @@ class OldBreadBookState extends State<OldBreadBook> {
     });
   }
 
-// Diminui a velocidade do PPM
-  void _decreasePPM() {
-    setState(() {
-      _showPpmText();
-      // Verifica se o PPM atual é maior que 10 para não ficar negativo
-      if (currentPPM > 10) {
-        // Decrementa o PPM atual em 10
-        currentPPM -= 10;
-        // Atualiza o intervalo do timer com o novo PPM
-        _updateTimerInterval();
-        // Reinicia o timer para aplicar a nova velocidade imediatamente
-        if (isPlaying) {
-          _pausePlaying();
-          _startPlaying();
-        }
-      }
-    });
-  }
-
-  // Mostrar PPM
+// Mostrar PPM
   void _showPpmText() {
     showPpmText = true;
     _ppmTimer?.cancel();
-    _ppmTimer = Timer(Duration(seconds: 3), () {
+    _ppmTimer = Timer(const Duration(seconds: 3), () {
       showPpmText = false;
     });
   }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-//Cadeado
+// Cadeado Aberto ou fechado
   void _toggleLock() {
     setState(() {
       isLocked = !isLocked;
     });
   }
 
-  /////////////////////// Rolagem Texto principal ////////////////////////
 
-/// Função para rolar até a palavra selecionada
-
-
-
-///////////////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -376,16 +323,20 @@ class OldBreadBookState extends State<OldBreadBook> {
                         selectedCircle = circle;
                       });
                     },
-                    setLightTheme: _setLightTheme,
-                    setLightMediumContrastTheme: _setLightMediumContrastTheme,
-                    setLightHighContrastTheme: _setLightHighContrastTheme,
-                    setDarkTheme: _setDarkTheme,
-                    setDarkMediumContrastTheme: _setDarkMediumContrastTheme,
-                    setDarkHighContrastTheme: _setDarkHighContrastTheme,
+                    setLightTheme: () => setTheme(ThemeType.light),
+                    setLightMediumContrastTheme: () =>
+                        setTheme(ThemeType.lightMediumContrast),
+                    setLightHighContrastTheme: () =>
+                        setTheme(ThemeType.lightHighContrast),
+                    setDarkTheme: () => setTheme(ThemeType.dark),
+                    setDarkMediumContrastTheme: () =>
+                        setTheme(ThemeType.darkMediumContrast),
+                    setDarkHighContrastTheme: () =>
+                        setTheme(ThemeType.darkHighContrast),
                     fontSize: fontSize,
-                    onFontSizeChanged: _handleFontSizeChange,
+                    onFontSizeChanged: (value) => _handleFontSizeChange('livro', value),
                     fontSizeP: fontSizeP,
-                    onFontSizeChangedP: _handleFontSizeChangeP,
+                    onFontSizeChangedP: (value) => _handleFontSizeChange('palavra', value),
                     isLocked: isLocked,
                   ),
                   AnimatedPositioned(
@@ -405,8 +356,8 @@ class OldBreadBookState extends State<OldBreadBook> {
                           _startPlaying();
                         }
                       },
-                      onNext: _increasePPM,
-                      onPrevious: _decreasePPM,
+                      onNext: () => _changePPM(true),
+                      onPrevious: () => _changePPM(false),
                     ),
                   ),
                 ],
