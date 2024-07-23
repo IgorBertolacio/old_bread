@@ -36,9 +36,9 @@ class OldBreadBook extends StatefulWidget {
 
 // Estado do aplicativo
 class OldBreadBookState extends State<OldBreadBook> {
-  bool   isMenuVisible  = false;            // Controle da visibilidade
-  bool   isMenuExpanded = false;            //Controle de expansão do menu
-  String _defaultText   = 'Carregando...';  // Texto padrão carregado
+  bool isMenuVisible = false; // Controle da visibilidade
+  bool isMenuExpanded = false; //Controle de expansão do menu
+  String _defaultText = 'Carregando...'; // Texto padrão carregado
   String defaultTextProcess = ''; // Texto padrão processado
   MenuOption selectedOption = MenuOption.none; // Opção selecionada
   SelectedCircle selectedCircle =
@@ -57,6 +57,8 @@ class OldBreadBookState extends State<OldBreadBook> {
   bool showPpmText = false; // Controle para exibir o texto PPM
   Timer? _ppmTimer; //Resolver problema com Visualização
   bool isLocked = true; // Cadeado do texto
+  bool switchValue = false; // valor Switch PPM CPM
+  double cpmAdjustmentFactor = 5.0; // ajuste CPM
 
   @override
   void initState() {
@@ -68,13 +70,12 @@ class OldBreadBookState extends State<OldBreadBook> {
     _updateTimerInterval();
   }
 
- 
   // Carrega o texto padrão do arquivo de recursos
   Future<void> _loadDefaultText() async {
     final String text = await rootBundle.loadString('assets/default_text.txt');
     setState(() {
       _defaultText = text;
-      _processText();
+      defaultTextProcess = _processText(text);
     });
   }
 
@@ -125,15 +126,16 @@ class OldBreadBookState extends State<OldBreadBook> {
   }
 
 // Manipula a alteração do tamanho da fonte
-void _handleFontSizeChange(String type, double value) {
-  setState(() {
-    if (type == 'livro') {
-      fontSize = value;
-    } else if (type == 'palavra') {
-      fontSizeP = value;
-    }
-  });
-}
+  void _handleFontSizeChange(String type, double value) {
+    setState(() {
+      if (type == 'livro') {
+        fontSize = value;
+      } else if (type == 'palavra') {
+        fontSizeP = value;
+      }
+    });
+  }
+
   // Armazena a palavra selecionada do texto
   void setSelectedIndex(int index) {
     setState(() {
@@ -143,23 +145,28 @@ void _handleFontSizeChange(String type, double value) {
   }
 
   // Tratmento de texto PROVISORIO
-  void _processText() {
+  String _processText(String text) {
     // Remover todos os quebras de linha
-    defaultTextProcess = _defaultText.replaceAll('\n', '');
-    // Adicionar um espaço depois de cada ponto e vírgula
-    defaultTextProcess = defaultTextProcess.replaceAll('.', '. ');
-    defaultTextProcess = defaultTextProcess.replaceAll(',', ', ');
-    // Substituir espaços duplos por espaços simples
-    while (defaultTextProcess.contains('  ')) {
-      defaultTextProcess = defaultTextProcess.replaceAll('  ', ' ');
+    text = text.replaceAll('\n', '');
+    text = text.replaceAll('.', '. ');
+    text = text.replaceAll(',', ', ');
+    while (text.contains('  ')) {
+      text = text.replaceAll('  ', ' ');
     }
+    return text;
   }
 
-  // Atualiza o intervalo do timer com base no PPM atual
-  void _updateTimerInterval() {
-    // Converte o PPM para milissegundos por palavra
+  // Atualiza o intervalo do timer com base no PPM ou CPM atual
+void _updateTimerInterval() {
+  if (switchValue) {
+    // CPM: Calcula o intervalo baseado nos caracteres por minuto
+    final int charCount = selectedWord.length;
+    timerInterval = ((60000 / (currentPPM / charCount)) / cpmAdjustmentFactor).round();
+  } else {
+    // PPM: Converte o PPM para milissegundos por palavra
     timerInterval = (60000 / currentPPM).round();
   }
+}
 
 // Inicia o avanço automático das palavras
   void _startPlaying() {
@@ -187,10 +194,14 @@ void _handleFontSizeChange(String type, double value) {
 // Avança para a próxima palavra no texto
   void _advanceWord() {
     setState(() {
-      if (selectedIndex < _defaultText.split(' ').length - 1) {
+      if (selectedIndex < defaultTextProcess.split(' ').length - 1) {
         // Atualiza o índice e a palavra selecionada para a próxima palavra
         selectedIndex += 1;
-        selectedWord = _defaultText.split(' ')[selectedIndex];
+        selectedWord = defaultTextProcess.split(' ')[selectedIndex];
+        // Atualiza o intervalo do timer com base na nova palavra
+        _updateTimerInterval();
+        _timer?.cancel();
+        _startPlaying();
       } else {
         // Pausa o avanço automático se a última palavra for alcançada
         _pausePlaying();
@@ -230,7 +241,12 @@ void _handleFontSizeChange(String type, double value) {
     });
   }
 
-
+  //Switch modo leitura
+  void onSwitchChanged(bool value) {
+    setState(() {
+      switchValue = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -284,6 +300,7 @@ void _handleFontSizeChange(String type, double value) {
                       }
                     },
                     child: MainTextWidget(
+                      defaultTextProcess: defaultTextProcess,
                       selectedIndex: selectedIndex,
                       onWordTap: setSelectedIndex,
                       defaultText: _defaultText,
@@ -291,10 +308,12 @@ void _handleFontSizeChange(String type, double value) {
                       isLocked: isLocked,
                     ),
                   ),
-                  // Menu principal com várias opções
+                  // Menu principal
                   MainMenu(
                     isMenuVisible: isMenuVisible,
                     isMenuExpanded: isMenuExpanded,
+                    switchValue: switchValue,
+                    onSwitchChanged: onSwitchChanged,
                     onMenuTap: () {
                       setState(() {
                         isMenuExpanded = !isMenuExpanded;
@@ -334,9 +353,11 @@ void _handleFontSizeChange(String type, double value) {
                     setDarkHighContrastTheme: () =>
                         setTheme(ThemeType.darkHighContrast),
                     fontSize: fontSize,
-                    onFontSizeChanged: (value) => _handleFontSizeChange('livro', value),
+                    onFontSizeChanged: (value) =>
+                        _handleFontSizeChange('livro', value),
                     fontSizeP: fontSizeP,
-                    onFontSizeChangedP: (value) => _handleFontSizeChange('palavra', value),
+                    onFontSizeChangedP: (value) =>
+                        _handleFontSizeChange('palavra', value),
                     isLocked: isLocked,
                   ),
                   AnimatedPositioned(

@@ -20,8 +20,9 @@ class FonteControlador extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
+    return Flexible(
+      child: SingleChildScrollView(
+          child: Column(children: [
         // Widget para ajustar o tamanho da fonte do livro
         const Text('Fonte do Livro'),
         Slider(
@@ -38,7 +39,7 @@ class FonteControlador extends StatelessWidget {
           max: 45.0,
           onChanged: onFontSizeChangedPalavra,
         ),
-      ],
+      ])),
     );
   }
 }

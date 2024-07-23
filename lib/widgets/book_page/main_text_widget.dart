@@ -14,6 +14,7 @@ class MainTextWidget extends StatelessWidget {
   final Function(int) onWordTap;
   // Cadeado
   final bool isLocked;
+  final String defaultTextProcess;
 
   const MainTextWidget({
     super.key,
@@ -21,16 +22,15 @@ class MainTextWidget extends StatelessWidget {
     required this.fontSize,
     required this.selectedIndex,
     required this.onWordTap, 
-    required this.isLocked,
+    required this.isLocked, 
+    required this.defaultTextProcess,
   });
 
   @override
   Widget build(BuildContext context) {
     List<TextSpan> textSpans = []; // Lista que irá conter os spans de texto
-
-    // String textoManipulado = defaultText.replaceAll('.', ' ');
   
-   List<String> words = defaultText.split(' ').where((word) => word.isNotEmpty).toList();
+   List<String> words = defaultTextProcess.split(' ');
 
     // Estilo padrão, usando o tema atual do contexto
     TextStyle defaultStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: fontSize);

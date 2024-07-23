@@ -1,9 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:old_bread/widgets/book_page/main_menu/config_options/config_menu.dart';
 import 'package:old_bread/widgets/book_page/main_menu/main_menu_header.dart';
 import 'package:old_bread/widgets/book_page/main_menu/colors_options/palette_menu.dart';
 import 'package:old_bread/widgets/book_page/main_menu/font_options/fonte_controller.dart';
-import 'package:old_bread/pages/book_page.dart'; 
+import 'package:old_bread/pages/book_page.dart';
 
 // Widget para o menu principal
 class MainMenu extends StatelessWidget {
@@ -32,6 +33,9 @@ class MainMenu extends StatelessWidget {
   final VoidCallback setDarkTheme;
   final VoidCallback setDarkMediumContrastTheme;
   final VoidCallback setDarkHighContrastTheme;
+  // Func Switchs
+  final bool switchValue;
+  final ValueChanged<bool> onSwitchChanged;
 
   //bloquio
   final bool isLocked;
@@ -57,8 +61,10 @@ class MainMenu extends StatelessWidget {
     required this.setLightHighContrastTheme,
     required this.setDarkTheme,
     required this.setDarkMediumContrastTheme,
-    required this.setDarkHighContrastTheme, 
-    required this.isLocked,
+    required this.setDarkHighContrastTheme,
+    required this.isLocked, 
+    required this.switchValue, 
+    required this.onSwitchChanged,
   });
 
   @override
@@ -102,7 +108,7 @@ class MainMenu extends StatelessWidget {
                         onOptionSelect: onOptionSelect,
                         onMenuTap: onMenuTap,
                         onSubMenuTap: onSubMenuTap,
-                        isLocked: isLocked,                        
+                        isLocked: isLocked,
                       ),
                       if (selectedOption == MenuOption.palette)
                         // Sub-menu de paleta de cores
@@ -122,21 +128,14 @@ class MainMenu extends StatelessWidget {
                         ),
                       if (selectedOption == MenuOption.text)
                         // Sub-menu de opções de fonte
-                        Flexible(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                // Widget para controlar o tamanho da fonte
-                                FonteControlador(
-                                  fontSizeLivro: fontSize,
-                                  fontSizePalavra: fontSizeP,
-                                  onFontSizeChangedLivro: onFontSizeChanged,
-                                  onFontSizeChangedPalavra: onFontSizeChangedP,
-                                ),
-                              ],
-                            ),
-                          ),
+                        FonteControlador(
+                          fontSizeLivro: fontSize,
+                          fontSizePalavra: fontSizeP,
+                          onFontSizeChangedLivro: onFontSizeChanged,
+                          onFontSizeChangedPalavra: onFontSizeChangedP,
                         ),
+                       if (selectedOption == MenuOption.settings)
+                       ConfMenu(switchValue: switchValue, onSwitchChanged: onSwitchChanged)
                     ],
                   ),
                 ),
