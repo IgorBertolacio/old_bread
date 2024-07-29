@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:old_bread/pages/book_page.dart';
+//import 'package:old_bread/pages/book_page.dart';
+import 'package:old_bread/pages/first_page.dart';
 import 'package:old_bread/themeBread.dart';
+
 
 // Função principal que inicia o aplicativo
 void main() {
@@ -14,11 +16,11 @@ class OldBreadApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false, 
       title: 'OldBread', 
-      theme: theme, 
-      home: const OldBreadBook(),
+      //theme: theme, 
+      home: FirstPage(),
     );
   }
 }

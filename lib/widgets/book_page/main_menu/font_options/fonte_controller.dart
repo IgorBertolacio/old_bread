@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 
 // Widget para controlar o tamanho da fonte
 class FonteControlador extends StatelessWidget {

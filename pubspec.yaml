@@ -12,14 +12,51 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.6
   screen_brightness: ^1.0.1
+  flutter_svg: ^2.0.10+1
+  flutter_screenutil: ^5.9.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/default_text.txt
+    - assets/icons_svg/
+    - assets/images/
+    - assets/fonts/
+
+  fonts:
+    - family: EBGaramond
+      fonts:
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-Italic.ttf
+          style: italic
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-ExtraBoldItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-SemiBoldItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/EBGaramond/static/EBGaramond-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/EBGaramond/EBGaramond-Italic-VariableFont_wght.ttf
+          style: italic
+        - asset: assets/fonts/EBGaramond/EBGaramond-VariableFont_wght.ttf
