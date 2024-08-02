@@ -27,8 +27,8 @@ flutter:
 
   assets:
     - assets/icons_svg/
-    - assets/images/
     - assets/fonts/
+    - assets/text/
 
   fonts:
     - family: EBGaramond

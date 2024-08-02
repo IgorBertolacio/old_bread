@@ -72,7 +72,7 @@ class OldBreadBookState extends State<OldBreadBook> {
 
   // Carrega o texto padrão do arquivo de recursos
   Future<void> _loadDefaultText() async {
-    final String text = await rootBundle.loadString('assets/default_text.txt');
+    final String text = await rootBundle.loadString('assets/text/default_text.txt');
     setState(() {
       _defaultText = text;
       defaultTextProcess = _processText(text);
