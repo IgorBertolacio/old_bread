@@ -18,6 +18,7 @@ class FirstPageState extends State<FirstPage>
   late Animation<double> _animation;
   double _ScrollOffset = 0.0;
   late PageController _scrollController;
+  
 
   @override
   void initState() {
@@ -76,9 +77,11 @@ class FirstPageState extends State<FirstPage>
     final topPadding = screenHeight * 0.10;
     final bottomPadding = screenHeight * 0.10;
 
+  
+
     return Scaffold(
         body: Stack(
-      children: [
+              children: [
         AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -89,13 +92,12 @@ class FirstPageState extends State<FirstPage>
                 child: SizedBox(
                   width: double.infinity,
                   height: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      //ThemeChenge
-                      Flexible(
-                        flex: 10,
-                        child: ThemeChangeWidgets(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        //ThemeChenge
+                        ThemeChangeWidgets(
                           topPadding: topPadding,
                           containerTitleHeight: containerTitleHeight,
                           containerTitleWidth: containerTitleWidth,
@@ -106,8 +108,8 @@ class FirstPageState extends State<FirstPage>
                           scrollOffset: _ScrollOffset,
                           themeTap: themeTap,
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -127,16 +129,19 @@ class FirstPageState extends State<FirstPage>
                   child: Container(
                     color: Colors.transparent,
                   ),
-                )),
+                ),),
             LoginScreen(
-              context,
-              screenHeight,
-              screenWidth,
-              colorScheme,
+              
+              screenHeight : screenHeight,
+              screenWidth : screenWidth,
+              colorScheme : colorScheme,
+              scrollOffset: _ScrollOffset,
+              animationValue: _animation.value
+              
             ),
           ],
         )
-      ],
-    ));
+              ],
+            ));
   }
 }

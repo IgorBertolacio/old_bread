@@ -101,3 +101,26 @@ class AnimationPainter extends CustomPainter {
     return true;
   }
 }
+
+class CirclerUP extends CustomPainter {
+  final double animationValue;
+
+  CirclerUP({required this.animationValue});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double radius = size.width * 0.5 * animationValue;
+    Offset center = Offset(size.width /2, size.height / 1.6);
+
+    Paint paintCircle = Paint()
+      ..color = const Color.fromARGB(77, 92, 99, 115)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 200);
+
+    canvas.drawCircle(center, radius, paintCircle);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}

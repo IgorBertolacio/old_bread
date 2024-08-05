@@ -41,12 +41,12 @@ class ThemeChangeWidgets extends StatelessWidget {
   Widget SvgBook(double bottomPadding, double containerSVGHeight,
       double containerSVGWidth) {
     return Transform.translate(
-      offset: Offset(0, scrollOffset * -0.5),
+      offset: Offset(0, scrollOffset * -1),
       child: Padding(
         padding: EdgeInsets.only(bottom: bottomPadding),
         child: SizedBox(
           height: containerSVGHeight,
-          width: containerSVGWidth,
+          width: double.infinity,
           child: SvgPicture.asset('assets/icons_svg/logo_dark.svg'),
         ),
       ),
