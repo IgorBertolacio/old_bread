@@ -1,5 +1,5 @@
-name: old_bread
-description: "A new Flutter project."
+name: daat_flow
+description: "Leitura Rapida"
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -15,6 +15,9 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_screenutil: ^5.9.3
   auto_size_text: ^3.0.0
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  logging: ^1.2.0
 
 dev_dependencies:
   flutter_test:

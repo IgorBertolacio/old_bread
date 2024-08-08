@@ -41,7 +41,7 @@ class MainWordControl extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.skip_previous),
+                    icon: const Icon(Icons.skip_previous),
                     onPressed: onPrevious,
                   ),
                   IconButton(
@@ -49,7 +49,7 @@ class MainWordControl extends StatelessWidget {
                     onPressed: onPlayPause,
                   ),
                   IconButton(
-                    icon: Icon(Icons.skip_next),
+                    icon: const Icon(Icons.skip_next),
                     onPressed: onNext,
                   ),
                 ],

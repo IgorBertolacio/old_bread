@@ -5,16 +5,15 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:daat_flow/main.dart';
+import 'package:daat_flow/comun/themeBread.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:old_bread/main.dart';
-import 'package:old_bread/themeBread.dart';
-
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Define um tema de teste
-    final testTheme = MaterialTheme(const TextTheme()).light();
+    final testTheme = const MaterialTheme(TextTheme()).light();
 
     // Constrói o aplicativo e dispara um quadro.
     await tester.pumpWidget(OldBreadApp(theme: testTheme));

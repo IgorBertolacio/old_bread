@@ -1,6 +1,6 @@
 {
-    "name": "old_bread",
-    "short_name": "old_bread",
+    "name": "daat_flow",
+    "short_name": "daat_flow",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

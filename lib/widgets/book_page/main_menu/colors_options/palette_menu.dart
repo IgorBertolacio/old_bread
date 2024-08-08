@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:old_bread/pages/book_page.dart';
-import 'package:old_bread/widgets/book_page/main_menu/colors_options/color_option.dart';
-import 'package:old_bread/widgets/book_page/main_menu/colors_options/old_bread_sub_options.dart';
-import 'package:old_bread/widgets/book_page/main_menu/colors_options/dark_sub_options.dart';
+import '../../../../pages/book_page.dart';
+import 'color_option.dart';
+import 'dark_sub_options.dart';
+import 'old_bread_sub_options.dart';
 
 // Widget para o sub-menu de paleta de cores
 class PaletteMenu extends StatelessWidget {

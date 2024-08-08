@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:old_bread/widgets/first_page/login_screen.dart';
-import 'package:old_bread/widgets/first_page/theme.dart';
-import 'package:old_bread/themeBread.dart';
-import 'package:old_bread/widgets/first_page/theme_change.dart';
+
+import '../comun/themeBread.dart';
+import 'login_screen.dart';
+import '../widgets/first_page/theme.dart';
+import '../widgets/first_page/theme_change.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
@@ -18,7 +19,6 @@ class FirstPageState extends State<FirstPage>
   late Animation<double> _animation;
   double _ScrollOffset = 0.0;
   late PageController _scrollController;
-  
 
   @override
   void initState() {
@@ -77,11 +77,9 @@ class FirstPageState extends State<FirstPage>
     final topPadding = screenHeight * 0.10;
     final bottomPadding = screenHeight * 0.10;
 
-  
-
     return Scaffold(
         body: Stack(
-              children: [
+      children: [
         AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -122,26 +120,24 @@ class FirstPageState extends State<FirstPage>
           scrollDirection: Axis.vertical,
           children: [
             SizedBox(
-                height: double.infinity,
-                width: double.infinity,
-                child: GestureDetector(
-                  onTap: oneTapScreen,
-                  child: Container(
-                    color: Colors.transparent,
-                  ),
-                ),),
-            LoginScreen(
-              
-              screenHeight : screenHeight,
-              screenWidth : screenWidth,
-              colorScheme : colorScheme,
-              scrollOffset: _ScrollOffset,
-              animationValue: _animation.value
-              
+              height: double.infinity,
+              width: double.infinity,
+              child: GestureDetector(
+                onTap: oneTapScreen,
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
             ),
+            LoginScreen(
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+                colorScheme: colorScheme,
+                scrollOffset: _ScrollOffset,
+                animationValue: _animation.value),
           ],
         )
-              ],
-            ));
+      ],
+    ));
   }
 }

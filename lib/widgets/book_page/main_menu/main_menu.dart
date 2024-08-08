@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:old_bread/widgets/book_page/main_menu/config_options/config_menu.dart';
-import 'package:old_bread/widgets/book_page/main_menu/main_menu_header.dart';
-import 'package:old_bread/widgets/book_page/main_menu/colors_options/palette_menu.dart';
-import 'package:old_bread/widgets/book_page/main_menu/font_options/fonte_controller.dart';
-import 'package:old_bread/pages/book_page.dart';
+import '../../../pages/book_page.dart';
+import 'colors_options/palette_menu.dart';
+import 'config_options/config_menu.dart';
+import 'font_options/fonte_controller.dart';
+import 'main_menu_header.dart';
 
 // Widget para o menu principal
 class MainMenu extends StatelessWidget {
@@ -62,8 +62,8 @@ class MainMenu extends StatelessWidget {
     required this.setDarkTheme,
     required this.setDarkMediumContrastTheme,
     required this.setDarkHighContrastTheme,
-    required this.isLocked, 
-    required this.switchValue, 
+    required this.isLocked,
+    required this.switchValue,
     required this.onSwitchChanged,
   });
 
@@ -134,8 +134,10 @@ class MainMenu extends StatelessWidget {
                           onFontSizeChangedLivro: onFontSizeChanged,
                           onFontSizeChangedPalavra: onFontSizeChangedP,
                         ),
-                       if (selectedOption == MenuOption.settings)
-                       ConfMenu(switchValue: switchValue, onSwitchChanged: onSwitchChanged)
+                      if (selectedOption == MenuOption.settings)
+                        ConfMenu(
+                            switchValue: switchValue,
+                            onSwitchChanged: onSwitchChanged)
                     ],
                   ),
                 ),

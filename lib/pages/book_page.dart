@@ -1,14 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:old_bread/themeBread.dart';
-import 'package:old_bread/widgets/book_page/word_control/main_word_control.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import 'package:old_bread/widgets/book_page/top_word_widget.dart';
-import 'package:old_bread/widgets/book_page/ppm_text_widget.dart';
-import 'package:old_bread/widgets/book_page/main_text_widget.dart';
-import 'package:old_bread/widgets/book_page/main_menu/main_menu.dart';
+import '../comun/themeBread.dart';
+import '../widgets/book_page/main_menu/main_menu.dart';
+import '../widgets/book_page/main_text_widget.dart';
+import '../widgets/book_page/ppm_text_widget.dart';
+import '../widgets/book_page/top_word_widget.dart';
+import '../widgets/book_page/word_control/main_word_control.dart';
 
 // Enum para as opções do menu
 enum MenuOption { none, palette, text, settings, lock }
@@ -72,7 +71,8 @@ class OldBreadBookState extends State<OldBreadBook> {
 
   // Carrega o texto padrão do arquivo de recursos
   Future<void> _loadDefaultText() async {
-    final String text = await rootBundle.loadString('assets/text/default_text.txt');
+    final String text =
+        await rootBundle.loadString('assets/text/default_text.txt');
     setState(() {
       _defaultText = text;
       defaultTextProcess = _processText(text);
@@ -157,16 +157,17 @@ class OldBreadBookState extends State<OldBreadBook> {
   }
 
   // Atualiza o intervalo do timer com base no PPM ou CPM atual
-void _updateTimerInterval() {
-  if (switchValue) {
-    // CPM: Calcula o intervalo baseado nos caracteres por minuto
-    final int charCount = selectedWord.length;
-    timerInterval = ((60000 / (currentPPM / charCount)) / cpmAdjustmentFactor).round();
-  } else {
-    // PPM: Converte o PPM para milissegundos por palavra
-    timerInterval = (60000 / currentPPM).round();
+  void _updateTimerInterval() {
+    if (switchValue) {
+      // CPM: Calcula o intervalo baseado nos caracteres por minuto
+      final int charCount = selectedWord.length;
+      timerInterval =
+          ((60000 / (currentPPM / charCount)) / cpmAdjustmentFactor).round();
+    } else {
+      // PPM: Converte o PPM para milissegundos por palavra
+      timerInterval = (60000 / currentPPM).round();
+    }
   }
-}
 
 // Inicia o avanço automático das palavras
   void _startPlaying() {

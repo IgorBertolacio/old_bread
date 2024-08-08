@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:old_bread/pages/first_page.dart';
+import '../../../../services/authentication_services.dart';
 
 class ConfMenu extends StatelessWidget {
   final bool switchValue;
@@ -40,13 +39,7 @@ class ConfMenu extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FirstPage(),
-                  ),
-                  (Route<dynamic> route) => false,
-                );
+                AuthServices().Logon();
               },
               child: const Text('Sair'),
             ),
